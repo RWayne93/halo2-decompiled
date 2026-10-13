@@ -80,8 +80,7 @@ struct s_partition_location
 	short cluster_index;
 };
 
-extern long g_4e7414;
-extern bool g_4e7411;
+#include "unknown_4e7410_storage.h"
 short structure_clusters_from_bit_vector(dword const *bits, short *count, short maximum_count, short *clusters);
 short __stdcall function_14a5b0(short cluster_index, point3f const *point, real radius, short maximum_count, short *clusters);
 

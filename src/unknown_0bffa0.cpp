@@ -12,7 +12,7 @@
 
 /* Light pool queries and the shapes copied from definitions and placements. */
 s_record_pool *g_4e030c;
-long g_4e0308;
+#include "unknown_4e0304_storage.h"
 
 
 // @retail 0xc0a50

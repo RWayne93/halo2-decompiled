@@ -62,8 +62,7 @@ struct s_132d60
 	real radius;
 };
 
-extern long g_4e7414;
-extern bool g_4e7411;
+#include "unknown_4e7410_storage.h"
 short __stdcall function_14a5b0(short cluster_index, point3f const *point, real radius, short maximum_count, short *clusters);
 void sort_4byte(long *elements, unsigned long count, void *unused, bool (__stdcall *compare)(long, long, const void *), const void *context);
 
@@ -148,7 +147,7 @@ long function_461c0(point3f const *a, point3f const *b, real radius);
 bool function_c3110(long index);
 bool function_c3140(long index);
 extern s_record_pool *g_4e030c;
-extern long g_4e0308;
+#include "unknown_4e0304_storage.h"
 
 struct s_132a30_light
 {
@@ -689,8 +688,7 @@ void function_133050(s_bit_vector_pool *data, long object_index, short section, 
 	}
 }
 
-extern long g_4e7c1c;
-long g_4e7c20[1024];
+#include "unknown_4e7c18_storage.h"
 bool function_16e210(long cluster_index, long value);
 
 struct s_visible_cluster
@@ -1103,8 +1101,7 @@ struct s_2cb30_globals
 };
 
 extern s_2cb30_globals g_4c0b78;
-extern bool g_4e7c18;
-bool g_4e0304;
+s_4e0304_storage g_4e0304_storage;
 struct s_view_collection_1733e0;
 void __stdcall function_173130(long camera_count, byte *cameras, long cluster_index, s_view_collection_1733e0 *collection);
 void function_1733e0(s_view_collection_1733e0 *collection, long cluster_index, byte const *camera);

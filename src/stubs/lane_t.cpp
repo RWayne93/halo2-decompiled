@@ -25,11 +25,6 @@ struct s_16760c_render_model;
 
 
 
-// @stub 0x12b6f0
-void function_12b6f0(real progress)
-{
-}
-
 /* lane O's region */
 // @stub 0x246c60
 void function_246c60(void *block, long unknown)

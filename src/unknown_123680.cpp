@@ -440,7 +440,8 @@ void function_1239d0(void)
 
 	if (requests->valid && async_globals.tasks_added <= 25)
 	{
-		long loads = function_123970();
+		long loads[2];
+		loads[0] = function_123970();
 		s_record_pool_iterator iterator;
 		s_record_pool_iterator next_iterator;
 		s_cache_request *request;
@@ -448,37 +449,41 @@ void function_1239d0(void)
 		iterator.data = requests;
 		iterator.index = NONE;
 		iterator.datum_index = NONE;
-		while ((request = (s_cache_request *)data_iterator_next_calling(&iterator)) != NULL && loads < 8)
+		while ((request = (s_cache_request *)data_iterator_next_calling(&iterator)) != NULL && loads[0] < 8)
 		{
-			if (request->priority == 1 && g_510c21)
+			if (request->priority == 1)
 			{
+				bool local_3 = g_510c21;
 				s_cache_resource *resource = request->resource;
 
-				if (resource->block_index == NONE)
+				if (local_3)
 				{
-					s_cache_load *load = function_123550(1, resource);
-
-					if (!load)
+					if (resource->block_index == NONE)
 					{
-						continue;
+						s_cache_load *load = function_123550(1, resource);
+
+						if (!load)
+						{
+							continue;
+						}
+						function_1235b0(load, 0x7000180, 1);
 					}
-					function_1235b0(load, 0x7000180, 1);
+					record_pool_release(g_4e3b4c, iterator.datum_index);
+					loads[0]++;
 				}
-				record_pool_release(g_4e3b4c, iterator.datum_index);
-				loads++;
 			}
 		}
 
 		next_iterator.data = g_4e3b4c;
 		next_iterator.index = NONE;
 		next_iterator.datum_index = NONE;
-		while ((request = (s_cache_request *)data_iterator_next_calling(&next_iterator)) != NULL && loads < 8)
+		while ((request = (s_cache_request *)data_iterator_next_calling(&next_iterator)) != NULL && loads[0] < 8)
 		{
-			if (g_510c21)
+			bool local_4 = g_510c21;
+			long priority = request->priority;
+			s_cache_resource *resource = request->resource;
+			if (local_4)
 			{
-				long priority = request->priority;
-				s_cache_resource *resource = request->resource;
-
 				if (resource->block_index == NONE)
 				{
 					s_cache_load *load = function_123550(priority, resource);
@@ -490,7 +495,7 @@ void function_1239d0(void)
 					function_1235b0(load, 0x7000180, priority);
 				}
 				record_pool_release(g_4e3b4c, next_iterator.datum_index);
-				loads++;
+				++loads[0];
 			}
 		}
 	}

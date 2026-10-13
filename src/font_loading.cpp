@@ -501,23 +501,37 @@ static inline long font_character_pixel(long alpha, long color)
 	return (((alpha << 1) | ((byte)alpha & 1)) << 12) | color;
 }
 
+static __forceinline dword function_x122610_1(byte arg_0)
+{
+	union
+	{
+		dword field_0;
+		byte field_4[4];
+	} local_0 = { 0 };
+	local_0.field_4[1] = arg_0;
+	return local_0.field_0;
+}
+
 /* decodes a character's run-length coded pixels to 16 bit pixels; returns
    how many pixels there are (with no destination it only counts them) */
 // @retail 0x122610
 long function_122610(long size, void *destination, void const *pixels)
 {
+	long local_0 = size;
+	long count = 0;
 	byte const *source = (byte const *)pixels;
 	word *output = (word *)destination;
-	long count = 0;
 	long color = 0xfff;
 
-	while (size > 0)
+	while (local_0 > 0)
 	{
 		dword code = *source;
-		dword type = code >> 6;
+		dword type;
+		type = code;
+		type >>= 6;
 		long length;
 
-		if (type > 1)
+		if ((long)type > 1)
 		{
 			long run = 2;
 
@@ -589,7 +603,8 @@ long function_122610(long size, void *destination, void const *pixels)
 
 			if (run == 0 && type == 0)
 			{
-				word value = (word)((source[1] << 8) | source[2]);
+				word value = source[2];
+				value |= function_x122610_1(source[1]);
 
 				color = value & 0xfff;
 				if (output)
@@ -601,7 +616,9 @@ long function_122610(long size, void *destination, void const *pixels)
 			{
 				if (output)
 				{
-					word pixel = (word)font_character_pixel((type == 0 ? 0 : 0xff) & 7, color);
+					byte alpha = type == 0;
+					alpha--;
+					word pixel = (word)font_character_pixel(alpha & 7, color);
 
 					for (long i = 0; i < run; i++)
 						output[i] = pixel;
@@ -611,7 +628,7 @@ long function_122610(long size, void *destination, void const *pixels)
 				length = 1;
 			}
 		}
-		size -= length;
+		local_0 -= length;
 		source += length;
 	}
 	return count;

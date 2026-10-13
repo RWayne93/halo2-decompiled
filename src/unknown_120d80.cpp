@@ -26,6 +26,7 @@ char const *g_4687ec = "z:\\preferences.dat";
 s_global_preferences_globals global_preferences_globals;
 
 long function_xf5684f(void const *a, void const *b, long size);
+extern "C" void _ReadWriteBarrier(void);
 
 void function_121120(void);
 
@@ -195,12 +196,15 @@ void function_121100(long *value)
 		(global_preferences_globals.current.unknown178 > 3 ? 3 : global_preferences_globals.current.unknown178);
 }
 
+#pragma intrinsic(_ReadWriteBarrier)
 // @retail 0x121120
 void function_121120(void)
 {
 	if (global_preferences_globals.dirty && global_preferences_globals.done)
 	{
-		if (function_xf5684f(PREFERENCES_DATA(&global_preferences_globals.current), PREFERENCES_DATA(&global_preferences_globals.saved), k_preferences_data_size) != 0)
+		long comparison = function_xf5684f(PREFERENCES_DATA(&global_preferences_globals.current), PREFERENCES_DATA(&global_preferences_globals.saved), k_preferences_data_size);
+		_ReadWriteBarrier();
+		if (comparison != 0)
 		{
 			XCALCSIG_SIGNATURE signature;
 			bool signed_data;
@@ -222,6 +226,7 @@ void function_121120(void)
 		global_preferences_globals.dirty = false;
 	}
 }
+#pragma function(_ReadWriteBarrier)
 
 // @retail 0x121220
 void global_preferences_set_defaults(void)

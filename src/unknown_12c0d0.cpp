@@ -1039,6 +1039,7 @@ void function_125d60(void);
 // @retail 0x12c990
 D3DTexture *function_12c990(s_bitmap_data *arg_0, long arg_1, bool arg_2, bool arg_3, bool arg_4, long arg_5, bool *arg_6, bool *arg_7)
 {
+	bool (*local_8)(s_bitmap_data *, long, bool, bool, long) = function_12d5a0;
 	D3DTexture *local_0 = NULL;
 	bool local_1 = async_globals.tasks_added > 25 || g_4e6484 >= 10;
 	if (arg_2 && (arg_3 || arg_5 > 2 || !local_1))
@@ -1047,7 +1048,7 @@ D3DTexture *function_12c990(s_bitmap_data *arg_0, long arg_1, bool arg_2, bool a
 		{
 			if (arg_0->block_indices[arg_1] == NONE)
 			{
-				if (!function_12d5a0(arg_0, arg_1, arg_3, arg_4, arg_5))
+				if (!local_8(arg_0, arg_1, arg_3, arg_4, arg_5))
 					*arg_7 = true;
 			}
 			if (arg_0->block_indices[arg_1] != NONE)

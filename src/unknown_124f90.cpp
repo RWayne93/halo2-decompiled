@@ -1306,6 +1306,7 @@ long function_127010(short class_index)
 /* a sound's gain in decibels: between its definition's bounds, with its
    class's and the caller's */
 #pragma inline_depth(0)
+inline long function_1251e0(void const *definition_pointer, long gain, real interpolation);
 // @retail 0x1251e0
 long function_1251e0(void const *definition_pointer, long gain, real interpolation)
 {

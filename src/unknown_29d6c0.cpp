@@ -94,7 +94,7 @@ bool function_29d7b0(long index, s_pathfinding_data *pathfinding, s_type_d4fbfa 
 		real position = (origin->z - first->z) * delta.k + (origin->y - first->y) * delta.j + (origin->x - first->x) * delta.i;
 		if (0.0f > position)
 			position = 0.0f;
-		if (position > length)
+		else if (position > length)
 			position = length;
 		if (side)
 			*side = 0;

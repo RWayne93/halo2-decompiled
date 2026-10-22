@@ -935,7 +935,7 @@ void function_11b710(long unit_index, long field_7c)
 				}
 			}
 
-			if (attached && attached_object_index != NONE)
+			if (attached_object_index != NONE && attached)
 			{
 				transform4x3f matrix;
 				function_ba3d0(unit_index);

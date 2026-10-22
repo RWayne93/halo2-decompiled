@@ -926,13 +926,13 @@ bool function_159610(void)
 
 	if (game_engine_get())
 	{
-		real timer = 1.0f;
+		double timer = 1.0;
 
 		if (g_4b9ed8 != NONE)
 		{
 			timer = function_xaee93d()->timers[g_4b9ed8];
 		}
-		if (timer >= 1.0f)
+		if (timer >= 1.0)
 		{
 			long player_index = NONE;
 
@@ -1650,16 +1650,13 @@ void function_15e460(long object_index, long value)
 // @retail 0x15eb20
 bool function_15eb20(long player_index)
 {
-	bool result = true;
-
-	if (game_engine_get() && player_index != NONE)
-	{
-		if (g_4e6948->mode_180 == 7 && juggernaut_is((short)player_index) && (g_4e6948->flags22c & 2))
-		{
-			return true;
-		}
-		result = engine_options()->value1c4 != 1;
-	}
+	bool result = false;
+	if (!game_engine_get() || player_index == NONE)
+		result = true;
+	else if (g_4e6948->mode_180 == 7 && juggernaut_is((short)player_index) && (g_4e6948->flags22c & 2))
+		result = true;
+	else if (engine_options()->value1c4 != 1)
+		result = true;
 	return result;
 }
 

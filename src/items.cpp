@@ -1237,14 +1237,14 @@ bool __stdcall function_10b4d0(long object_index)
                     point3f position;
                     s_type_1e6529 data;
                     data.unknown7c = NONE;
-                    function_b9dd0(object_index, &position);
+                    point3f *event_point = function_b9dd0(object_index, &position);
                     function_d6660(&data, damage_index);
                     data.owner = owner;
                     *(byte *)&data.unknown84 = 4;
                     data.unknown54 = 1.0f;
                     object_get_root_location(object_index, (s_location *)&data.unknown1c);
-                    data.origin = position;
-                    data.position = position;
+                    data.origin = *event_point;
+                    data.position = *event_point;
                     function_d6c80(&data, NONE);
                 }
                 function_176780(object_index, (s_effect_owner const *)&owner, 0.0f, *(long *)(definition + 0x128), 0.0f, NULL, NULL);

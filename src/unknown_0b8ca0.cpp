@@ -226,14 +226,15 @@ void __stdcall function_b9b90(long object_index, bool disable)
 	s_object_view *object = header->object;
 	dword const &type = header->type;
 	dword type_mask = 1 << type;
+	long component_index = object->havok_component_index;
 
 	if ((type_mask & 0x1883) &&
 		TEST_FIELD_BIT(((s_physics_flags *)((byte *)object + 0xc0))->active) &&
-		object->havok_component_index != NONE)
+		component_index != NONE)
 	{
 		if (!disable)
 		{
-			havok_component_rigid_bodies_activate(havok_component_get(object->havok_component_index));
+			havok_component_rigid_bodies_activate(havok_component_get(component_index));
 		}
 		else
 			goto update;

@@ -955,9 +955,9 @@ real function_1f9e70(long actor_index, long object_index, point2f const *positio
     byte *settings = (byte *)function_1e5450(actor_index, object->tag_index);
     real speed_scale;
     real turning_scale = 1.0f;
-    real approach_scale = 1.0f;
     real facing_scale = 1.0f;
     real velocity_scale = 1.0f;
+    real following_scale = 1.0f;
     speed_scale = *(real *)(actor + 0x4b4) != 0.0f ? *(real *)(actor + 0x4b4) : 1.0f;
     if (!ignore_facing)
     {
@@ -993,6 +993,7 @@ real function_1f9e70(long actor_index, long object_index, point2f const *positio
         real scale = (1.0f - minimum) * fraction * fraction + minimum;
         turning_scale = (1.0f - scale) * distance / (radius * 2.0f) + scale;
     }
+    real approach_scale = 1.0f;
     if (!actor[0x4ae])
     {
         double x = (double)*(real *)(actor + 0x510) - position->x;
@@ -1015,7 +1016,6 @@ real function_1f9e70(long actor_index, long object_index, point2f const *positio
             approach_scale = (1.0f - minimum) / radius * remaining + minimum;
         }
     }
-    real following_scale = 1.0f;
     if (actor[0x50c] && *(short *)(actor + 0x504) == 1 && *(short *)(actor + 0x5b0) == 7 &&
         *(long *)(actor + 0x5ac) != NONE)
     {

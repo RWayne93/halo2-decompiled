@@ -3146,13 +3146,12 @@ real function_159690(long player_index, long target_index)
 	s_engine_player_fade *target = (s_engine_player_fade *)engine_player_get(target_index);
 	real result = 0.0f;
 	long target_unit = target->unit_index;
-	if (target_unit != NONE)
+	if (target->unit_index != NONE)
 	{
 		long unit_index = player->unit_index;
-		char death_time = player->death_time;
-		if (unit_index == NONE && death_time != NONE)
+		if (unit_index == NONE && player->death_time != NONE)
 		{
-			real amount = 1.0f - (real)death_time / g_510c54->field_2_3;
+			real amount = 1.0f - (real)player->death_time / g_510c54->field_2_3;
 			amount = amount < 0.0f ? 0.0f : amount > 1.0f ? 1.0f : amount;
 			result = powf(amount, 1.9f);
 		}

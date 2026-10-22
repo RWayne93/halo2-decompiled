@@ -69,7 +69,7 @@ both cell calls share (see [Code-shape notes](#code-shape-notes)).
 | `flags` | `entry+4` | Bit 0: the caller gives a cell index (`0x2110d1`). Bit 1: with bit 0, use the `unknown4` medium (`0x2110e3`–`0x2110ed`). Bit 2: no collision (`0x2112d0`) |
 | `physics` | `entry+8` | The definition, held in `ebp` (`0x21106d`) |
 | `location` | `entry+0xc` | An `s_location`, read by `function_211b30` and rewritten when a lookup gives a leaf |
-| `cell_index` | `entry+0x10` | Read only under bit 0, as `function_211b70`'s index (`0x2110e6`) |
+| `cell_slot` | `entry+0x10` | Read only under bit 0, as `function_211b70`'s index (`0x2110e6`) |
 | `position` | `entry+0x14` | A `point3f`, read and rewritten |
 | `force` | `entry+0x18` | Optional `vector3f const *`; read at `0x2111fe` |
 | `normal` | `entry+0x1c` | Optional `vector3f *`; receives the hit plane's normal (`0x211398`) |
@@ -116,7 +116,7 @@ type), the radius and `dt`; `velocity` goes in `eax` last
 (`push 0x3ca3d70a` at `0x116358`) and half the state's width for a contrail
 point (`0x17c733`–`0x17c742`).
 
-So neither existing caller uses `flags`, `cell_index`, `force`, `normal` or
+So neither existing caller uses `flags`, `cell_slot`, `force`, `normal` or
 `material_type`, and both always take the location path for the cell vector.
 
 ## Data
@@ -168,7 +168,7 @@ set from flag bit 4 with an `or eax, 2` / `and eax, 0xfffffffd` pair
 calls, and `edi` points at the cell vector (`0x2110d5`).
 
 - **`flags` bit 0 set:** the medium flag `bl` is `flags` bit 1
-  (`shr ebx, 1; and bl, 1`), and `function_211b70(cell_index, position, mode,
+  (`shr ebx, 1; and bl, 1`), and `function_211b70(cell_slot, position, mode,
   &cell)` is called with the index in `eax` and `position` pushed
   (`0x2110dc`–`0x2110f0`).
 - **Otherwise:** `function_211b30(location, position, mode, &cell)` with
@@ -299,12 +299,12 @@ epilogue; otherwise it returns them through the loop's (`je 0x211528` at
 ## A possible source form
 
 Unverified: it has not been compiled, and it follows the retail shapes noted
-above. `s_physics_definition` stands for the definition; its field names are
+above. `s_point_mover_settings` stands for the definition; its field names are
 the descriptions from [Data](#data).
 
 ```c
-long function_211060(dword flags, s_physics_definition const *physics, s_location *location,
-	long cell_index, point3f *position, vector3f const *force, vector3f *normal,
+long function_211060(dword flags, s_point_mover_settings const *physics, s_location *location,
+	long cell_slot, point3f *position, vector3f const *force, vector3f *normal,
 	short *material_type, real radius, real dt, vector3f *velocity)
 {
 	if (dt == 0.0f)
@@ -320,7 +320,7 @@ long function_211060(dword flags, s_physics_definition const *physics, s_locatio
 	if (TEST_FLAG(flags, 0))
 	{
 		medium_4 = TEST_FLAG(flags, 1);
-		function_211b70((short)cell_index, position->n, mode, &cell);
+		function_211b70((short)cell_slot, position->n, mode, &cell);
 	}
 	else
 		medium_4 = function_211b30((byte const *)location, position->n, mode, &cell);

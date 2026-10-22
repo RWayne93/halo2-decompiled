@@ -1558,7 +1558,7 @@ PRIVATE __forceinline void surface_sample_unpack(short const *source, s_sample_p
 long __stdcall function_d1e10(void const *surface, s_effect_color_query *query, long flags, bool value)
 {
     s_structure_lightmap_triangle const *triangle = (s_structure_lightmap_triangle const *)surface;
-    volatile long result = 2;
+    long result = 2;
     if (*(long const *)triangle->unknown08 == NONE)
     {
         s_mesh *mesh = NULL;
@@ -1579,10 +1579,19 @@ long __stdcall function_d1e10(void const *surface, s_effect_color_query *query, 
             }
             byte *bsp = (byte *)g_4e0344->locations;
             long index = triangle->instance_index;
-            bool per_vertex = index != NONE &&
-                *(word *)(*(byte **)((byte *)g_4e0348 + 0x144) + index * 0x58 + 0x56) != 0;
             real u = 0.0f, v = 0.0f;
             real base_u = 0.0f, base_v = 0.0f;
+            long bitmap_index = NONE;
+            long palette_index = NONE;
+            bool per_vertex = index != NONE &&
+                *(word *)(*(byte **)((byte *)g_4e0348 + 0x144) + index * 0x58 + 0x56) != 0;
+            if (!per_vertex)
+            {
+                byte *entry = index != NONE ? *(byte **)(bsp + 0x4c) + index * 4 :
+                    *(byte **)(bsp + 0x2c) + triangle->cluster_index * 4;
+                bitmap_index = *(short *)entry;
+                palette_index = (signed char)entry[2];
+            }
             vector3f normal = *g_4687b0;
             color3f base = *g_468734;
             color3f lightmap = *g_46872c;
@@ -1590,10 +1599,8 @@ long __stdcall function_d1e10(void const *surface, s_effect_color_query *query, 
                 *(byte **)((byte *)g_4e0348 + 0xa8) + *(short *)(part + 4) * 0x20));
             if (!per_vertex)
             {
-                byte *entry = index != NONE ? *(byte **)(bsp + 0x4c) + index * 4 :
-                    *(byte **)(bsp + 0x2c) + triangle->cluster_index * 4;
                 function_d2bf0(mesh, triangle->lightmap_part_index, triangle->u, triangle->v, &u, &v);
-                result = function_d2f90(flags, *(short *)entry, (signed char)entry[2], u, v, &lightmap);
+                result = function_d2f90(flags, bitmap_index, palette_index, u, v, &lightmap);
             }
             else
             {
@@ -1636,14 +1643,16 @@ long __stdcall function_d1e10(void const *surface, s_effect_color_query *query, 
             if (block)
             {
                 byte *data = *(byte **)(block + 0xc) + *(long *)(block + 4);
-                s_sample_point points[3];
+                s_sample_point point_a;
+                s_sample_point point_b;
+                s_sample_point point_c;
                 s_sample_point const *a, *b, *c;
                 if (block[0] == 0x39)
                 {
-                    surface_sample_unpack((short *)(data + vertices[0] * 10), &points[0]);
-                    surface_sample_unpack((short *)(data + vertices[1] * 10), &points[1]);
-                    surface_sample_unpack((short *)(data + vertices[2] * 10), &points[2]);
-                    a = &points[0]; b = &points[1]; c = &points[2];
+                    surface_sample_unpack((short *)(data + vertices[0] * 10), &point_a);
+                    surface_sample_unpack((short *)(data + vertices[1] * 10), &point_b);
+                    surface_sample_unpack((short *)(data + vertices[2] * 10), &point_c);
+                    a = &point_a; b = &point_b; c = &point_c;
                 }
                 else
                 {

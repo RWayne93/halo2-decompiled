@@ -627,91 +627,94 @@ static __forceinline long object_query_next_ab(s_record_pool *data, long index)
 bool function_bba80(long object_index)
 {
     bool result = false;
-    long root = NONE;
-    long index = object_index;
-    s_object_header_view *headers = (s_object_header_view *)g_4e0300->data;
-    while (index != NONE)
     {
-        root = index;
-        index = *(long *)((byte *)headers[index & 0xffff].object + 0x14);
-    }
-    s_object_header_view *header = OBJECT_HEADER_GET(root);
-    dword flags = *(dword *)((byte *)header->object + 4);
-    if (!(((byte *)header)[2] & 1) || !(bool)((flags >> 8) & 1) || (bool)((flags >> 18) & 1))
-        return result;
-    s_object_link_iterator links;
-    short cluster = function_b8a80(root, &links);
-    while (cluster != NONE)
-    {
-        if (((dword *)((byte *)g_4e6948 + 0x1138))[cluster >> 5] & (1 << (cluster & 31)))
-            break;
-        cluster = function_b8b20(&links);
-    }
-    if (cluster == NONE)
-        return result;
-
-    byte *object = (byte *)OBJECT_GET(object_index);
-    byte *definition = g_4e3b44[*(long *)object & 0xffff].bytes;
-    long model_index = *(long *)(definition + 0x38);
-    real radius_squared = *(real *)(object + 0x3c) * *(real *)(object + 0x3c);
-    real range_squared = 0.0f;
-    if (model_index != NONE)
-    {
-        real range = *(real *)(g_4e3b44[model_index & 0xffff].bytes + 0x28);
-        if (range > 0.0f)
+        long root = NONE;
+        long index = object_index;
+        s_object_header_view *headers = (s_object_header_view *)g_4e0300->data;
+        while (index != NONE)
         {
-            range *= 1.2f;
-            range_squared = range * range;
+            root = index;
+            index = *(long *)((byte *)headers[index & 0xffff].object + 0x14);
         }
-        else
-            range_squared = 1600.0f;
-    }
-    s_record_pool *players = g_4e8c24;
-    long player_index = object_query_next_ab(players, NONE);
-    while (player_index != NONE)
-    {
-        byte *player = players->data + (player_index & 0xffff) * 0x21c;
-        long unit_index = *(long *)(player + 0x2c);
-        if (unit_index != NONE)
+        s_object_header_view *header = OBJECT_HEADER_GET(root);
+        dword flags = *(dword *)((byte *)header->object + 4);
+        if (!(((byte *)header)[2] & 1) || !(bool)((flags >> 8) & 1) || (bool)((flags >> 18) & 1))
+            goto done;
+        s_object_link_iterator links;
+        short cluster = function_b8a80(root, &links);
+        while (cluster != NONE)
         {
-            s_object_marker marker;
-            function_b8d30(unit_index, 0x04000095, &marker, 1, false);
-            point3f position = marker.matrix.position;
-            point3f *centre = (point3f *)(object + 0x30);
-            vector3f offset;
-            offset.i = centre->x - position.x;
-            offset.j = centre->y - position.y;
-            offset.k = centre->z - position.z;
-            real distance_squared = offset.k * offset.k + offset.j * offset.j + offset.i * offset.i;
-            byte *unit = (byte *)OBJECT_GET(*(long *)(player + 0x2c));
-            real zoom = function_c8880(*(long *)(player + 0x2c), *(signed char *)(unit + 0x240));
-            if (zoom > 0.0001f)
-                distance_squared /= zoom * zoom;
-            if (distance_squared < radius_squared)
-            {
-                result = true;
+            if (((dword *)((byte *)g_4e6948 + 0x1138))[cluster >> 5] & (1 << (cluster & 31)))
                 break;
-            }
-            if (distance_squared < range_squared)
+            cluster = function_b8b20(&links);
+        }
+        if (cluster == NONE)
+            goto done;
+
+        byte *object = (byte *)OBJECT_GET(object_index);
+        byte *definition = g_4e3b44[*(long *)object & 0xffff].bytes;
+        long model_index = *(long *)(definition + 0x38);
+        real radius_squared = *(real *)(object + 0x3c) * *(real *)(object + 0x3c);
+        real range_squared = 0.0f;
+        if (model_index != NONE)
+        {
+            real range = *(real *)(g_4e3b44[model_index & 0xffff].bytes + 0x28);
+            if (range > 0.0f)
             {
+                range *= 1.2f;
+                range_squared = range * range;
+            }
+            else
+                range_squared = 1600.0f;
+        }
+        s_record_pool *players = g_4e8c24;
+        long player_index = object_query_next_ab(players, NONE);
+        while (player_index != NONE)
+        {
+            byte *player = players->data + (player_index & 0xffff) * 0x21c;
+            long unit_index = *(long *)(player + 0x2c);
+            if (unit_index != NONE)
+            {
+                s_object_marker marker;
+                function_b8d30(unit_index, 0x04000095, &marker, 1, false);
+                point3f position = marker.matrix.position;
+                point3f *centre = (point3f *)(object + 0x30);
+                vector3f offset;
                 offset.i = centre->x - position.x;
                 offset.j = centre->y - position.y;
                 offset.k = centre->z - position.z;
-                vector3f *forward = (vector3f *)((byte *)OBJECT_GET(*(long *)(player + 0x2c)) + 0x15c);
-                double radius_value = *(real *)(object + 0x3c);
-                double const &radius = radius_value;
-                real magnitude = function_30bf0(&offset);
-                if (offset.k * forward->k + offset.j * forward->j + offset.i * forward->i >
-                    cos(atan2((double)magnitude, radius) + 0.7853981852531433f))
+                real distance_squared = offset.k * offset.k + offset.j * offset.j + offset.i * offset.i;
+                byte *unit = (byte *)OBJECT_GET(*(long *)(player + 0x2c));
+                real zoom = function_c8880(*(long *)(player + 0x2c), *(signed char *)(unit + 0x240));
+                if (zoom > 0.0001f)
+                    distance_squared /= zoom * zoom;
+                if (distance_squared < radius_squared)
                 {
                     result = true;
-                    break;
+                    goto done;
+                }
+                if (distance_squared < range_squared)
+                {
+                    offset.i = centre->x - position.x;
+                    offset.j = centre->y - position.y;
+                    offset.k = centre->z - position.z;
+                    vector3f *forward = (vector3f *)((byte *)OBJECT_GET(*(long *)(player + 0x2c)) + 0x15c);
+                    double radius_value = *(real *)(object + 0x3c);
+                    double const &radius = radius_value;
+                    real magnitude = function_30bf0(&offset);
+                    if (offset.k * forward->k + offset.j * forward->j + offset.i * forward->i >
+                        cos(atan2((double)magnitude, radius) + 0.7853981852531433f))
+                    {
+                        result = true;
+                        goto done;
+                    }
                 }
             }
+            players = g_4e8c24;
+            player_index = object_query_next_ab(players, player_index);
         }
-        players = g_4e8c24;
-        player_index = object_query_next_ab(players, player_index);
     }
+done:
     return result;
 }
 

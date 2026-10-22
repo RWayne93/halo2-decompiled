@@ -1143,7 +1143,7 @@ va,size,owner,style,evidence,name,object,calls,source,status
 0006c1d0,194,game,speed,a16 pad,,,0006cd50 0006cf00 003a0774,src/unknown_06c1d0.cpp,matched
 0006c2a0,181,game,speed,a16 pad,,,0006bff0 0006c670 0006cd50 0007f410 0008d730,src/online_tasks.cpp,matched
 0006c360,240,game,speed,a16 pad,,,0006bff0 0006c670 0006c750,src/online_tasks.cpp,todo
-0006c450,80,game,unknown,a16,,,0006c670,src/online_tasks.cpp,todo
+0006c450,80,game,unknown,a16,,,0006c670,src/online_tasks.cpp,matched
 0006c4a0,185,game,unknown,a16,,,0008e5e0,src/unknown_06b590.cpp,matched
 0006c560,261,game,speed,a16 pad,,,0006b640 0006c2a0 0006c360 0006c450 0006c4a0 0008cc40,src/online_tasks.cpp,matched
 0006c670,71,game,speed,a16 pad,,,0006cd50 0008d7c0 003a0620,src/online_tasks.cpp,matched
@@ -3444,7 +3444,7 @@ va,size,owner,style,evidence,name,object,calls,source,status
 00101d20,132,game,speed,a16 pad,,,,src/weapons.cpp,matched
 00101db0,201,game,speed,a16 pad,,,001039a0 00159dd0,src/weapons.cpp,matched
 00101e80,60,game,speed,a16 pad,,,,src/unknown_101e80.cpp,matched
-00101ec0,85,game,speed,a16 pad,,,,src/unknown_101e80.cpp,todo
+00101ec0,85,game,speed,a16 pad,,,,src/unknown_101e80.cpp,matched
 00101f20,42,game,speed,a16 pad,,,,src/unknown_101e80.cpp,matched
 00101f50,91,game,speed,a16 pad,,,,src/unknown_101e80.cpp,matched
 00101fb0,178,game,speed,a16 pad,,,000badc0,src/unknown_101e80.cpp,matched

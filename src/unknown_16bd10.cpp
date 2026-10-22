@@ -925,18 +925,22 @@ void __stdcall function_16c840(long user_index, long unused, s_observer_command 
 	camera = camera_scripting_state;
 	field_of_view = g_54e854;
 	camera->active = false;
-	if (g_510c50 && ((s_camera_field_of_view_flags *)g_510c50)->active && camera->field_of_view_target != 0.0f)
+	if (g_510c50 && ((s_camera_field_of_view_flags *)g_510c50)->active)
 	{
-		if (camera->field_of_view_time >= camera->field_of_view_duration)
+		real target = camera->field_of_view_target;
+		if (target != 0.0f)
 		{
-			field_of_view = camera->field_of_view_target;
-		}
-		else
-		{
-			real t = camera->field_of_view_time / camera->field_of_view_duration;
+			if (camera->field_of_view_time >= camera->field_of_view_duration)
+			{
+				field_of_view = target;
+			}
+			else
+			{
+				real t = camera->field_of_view_time / camera->field_of_view_duration;
 
-			t = PIN(t, 0.0f, 1.0f);
-			field_of_view = (camera->field_of_view_target - camera->field_of_view_start) * t + camera->field_of_view_start;
+				t = PIN(t, 0.0f, 1.0f);
+				field_of_view = (target - camera->field_of_view_start) * t + camera->field_of_view_start;
+			}
 		}
 	}
 	command->field_of_view = field_of_view;

@@ -66,7 +66,9 @@ struct s_object_view
 	word physics_active : 1;
 	word flag7c0 : 1;
 	word physics_disabled : 1;
-	word : 7;
+	word : 2;
+	word flag11c0 : 1;
+	word : 4;
 	byte unknown0c2[0xd4 - 0xc2];
 	long field_x10a40f;
 	byte unknown0d8[0x10e - 0xd8];
@@ -1511,7 +1513,7 @@ void __stdcall function_bc5e0(long index)
                 transform4x3f matrix;
                 function_1d4360(component, &matrix);
                 vector3f *forward = &matrix.forward, *up = &matrix.up;
-                if (TEST_FIELD_BIT(component->flag1)) forward = up = 0;
+                if (TEST_FIELD_BIT(component->flag1)) up = forward = 0;
                 else function_b91d0(index, forward, up);
                 function_b7430(index, &matrix.position, forward, up, 0, false, false, false, true);
                 if (active)
@@ -1532,7 +1534,7 @@ void __stdcall function_bc5e0(long index)
         }
     motion_done:
         disabled = !active;
-        if (((byte *)g_4e6948)[0xc] != 4 && (*(word *)((byte *)object + 0xc0) & 0x800))
+        if (((byte *)g_4e6948)[0xc] != 4 && TEST_FIELD_BIT(object->flag11c0))
         {
             function_1d96d0(object->havok_component_index);
             ((byte *)object)[0xc1] &= ~8;
@@ -1541,9 +1543,13 @@ void __stdcall function_bc5e0(long index)
     else
     {
         long parent = object->parent_index;
-        disabled = parent == NONE || (((byte *)OBJECT_GET(parent))[0xc1] & 1);
+        disabled = parent != NONE ?
+            TEST_FIELD_BIT(OBJECT_GET(parent)->physics_disabled) : true;
     }
-    object->physics_disabled = disabled;
+    if (disabled)
+        object->physics_disabled = true;
+    else
+        object->physics_disabled = false;
 }
 
 PRIVATE __forceinline void object_attachment_point(transform4x3f const *matrix, point3f const *point, point3f *result)
@@ -1568,7 +1574,7 @@ long function_baf80(long index);
 void function_bba20(long index);
 
 // @retail 0xb93b0
-void __stdcall function_b93b0(volatile long parent_index, volatile long index, volatile short node)
+void __stdcall function_b93b0(long parent_index, volatile long index, volatile short node)
 {
     s_record_pool *pool = g_4e0300;
     long offset = (index & 0xffff) * 12;

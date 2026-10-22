@@ -1937,7 +1937,8 @@ void sound_system_update_time(void)
 		}
 		else if (!function_12be90())
 		{
-			real step = sound_system->elapsed_time / (0.001f > sound_system->master_fade_times.k ? 0.001f : sound_system->master_fade_times.k);
+			real fade_seconds = sound_system->elapsed_time;
+			real step = fade_seconds / (0.001f > sound_system->master_fade_times.k ? 0.001f : sound_system->master_fade_times.k);
 
 			approach_126660(&sound_system->master_fade, 1.0f - sound_system->master_fade, 0.0f - step, step);
 			sound_system->master_fade_delay = NONE;

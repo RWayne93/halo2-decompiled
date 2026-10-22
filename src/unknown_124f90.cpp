@@ -2453,13 +2453,17 @@ static inline real sound_vector_normalize(vector3f *v)
 {
 	real length = (real)sqrt(v->i * v->i + v->j * v->j + v->k * v->k);
 
+	real i = v->i;
+	real j = v->j;
+	real k = v->k;
+
 	if (!(0.0001f > fabs(length)))
 	{
 		real inverse = 1.0f / length;
 
-		v->i = inverse * v->i;
-		v->j *= inverse;
-		v->k *= inverse;
+		v->i = inverse * i;
+		v->j = j * inverse;
+		v->k = k * inverse;
 	}
 	return length;
 }

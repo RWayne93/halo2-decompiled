@@ -244,11 +244,11 @@ void object_widget_delete(long object_index, long handle)
 
             if (widget->handle == handle_value)
             {
-                short type = widget->type;
+                void (__stdcall *dispose)(long) = g_467498[widget->type].dispose;
                 object->widget_head = widget->next;
 
                 if (widget->handle != NONE)
-                    g_467498[type].dispose(widget->handle);
+                    dispose(widget->handle);
 
                 record_pool_release(g_4e0320, widget_index);
             }

@@ -610,11 +610,12 @@ bool function_06e720(c_class_58d20 *session)
 			if (member_count > 0)
 			{
 				long i = 0;
+				long members_remaining = member_count;
 				do
 				{
 					addresses[i] = *(s_session_machine *)((byte *)session->members[i].words + 0xa);
 					i++;
-				} while (i < member_count);
+				} while (--members_remaining);
 			}
 			for (long i = 0; i < 16; i++)
 			{

@@ -1549,10 +1549,7 @@ void __stdcall function_bc5e0(long index)
         disabled = parent != NONE ?
             TEST_FIELD_BIT(OBJECT_GET(parent)->physics_disabled) : true;
     }
-    if (disabled)
-        object->physics_disabled = true;
-    else
-        object->physics_disabled = false;
+    object->physics_disabled = disabled ? 1 : 0;
 }
 
 PRIVATE __forceinline void object_attachment_point(transform4x3f const *matrix, point3f const *point, point3f *result)
@@ -1601,7 +1598,8 @@ void __stdcall function_b93b0(long parent_index, volatile long index, volatile s
     parent = (byte *)OBJECT_GET(parent_index);
     transform4x3f *nodes = (transform4x3f *)(parent + *(short *)(parent + 0x116));
     *(long *)(object + 0x14) = parent_index;
-    object[0x18] = (byte)node;
+    short node_index = node;
+    object[0x18] = (byte)node_index;
     *(long *)((byte *)OBJECT_GET(index) + 0xc) = *(long *)(parent + 0x10);
     *(long *)(parent + 0x10) = index;
     header->flags |= 0x80;
@@ -1609,7 +1607,7 @@ void __stdcall function_b93b0(long parent_index, volatile long index, volatile s
     *(short *)(object + 0x2c) = NONE;
     *(short *)(object + 0x2e) = g_4686c4;
     transform4x3f inverse;
-    function_141590(&nodes[(short)node], &inverse);
+    function_141590(&nodes[node_index], &inverse);
     point3f position;
     vector3f forward, up;
     object_attachment_point(&inverse, (point3f *)(object + 0x64), &position);

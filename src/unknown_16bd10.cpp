@@ -218,6 +218,7 @@ real camera_velocity_profile_evaluate(s_camera_velocity_profile const *profile, 
 		long acceleration_ticks;
 		long hold_ticks;
 		long deceleration_ticks;
+		real a, b, c;
 
 		rates[0] = profile->start_rate;
 		rates[1] = profile->peak_rate;
@@ -236,6 +237,7 @@ real camera_velocity_profile_evaluate(s_camera_velocity_profile const *profile, 
 			acceleration_ticks = profile->acceleration_ticks;
 		}
 
+		a = (real)acceleration_ticks;
 		if (ticks - profile->acceleration_ticks < 0)
 		{
 			hold_ticks = 0;
@@ -250,6 +252,7 @@ real camera_velocity_profile_evaluate(s_camera_velocity_profile const *profile, 
 			hold_ticks = ticks - profile->acceleration_ticks;
 		}
 
+		b = (real)hold_ticks;
 		if (ticks - (profile->total_ticks - profile->deceleration_ticks) < 0)
 		{
 			deceleration_ticks = 0;
@@ -263,11 +266,8 @@ real camera_velocity_profile_evaluate(s_camera_velocity_profile const *profile, 
 			deceleration_ticks = ticks - (profile->total_ticks - profile->deceleration_ticks);
 		}
 
+		c = (real)deceleration_ticks;
 		{
-			real a = (real)acceleration_ticks;
-			real b = (real)hold_ticks;
-			real c = (real)deceleration_ticks;
-
 			result = c * c * accelerations[2] + a * a * accelerations[0] + c * rates[2] + b * rates[1] + a * rates[0] +
 				b * b * accelerations[1];
 		}

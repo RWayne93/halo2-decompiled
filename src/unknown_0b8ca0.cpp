@@ -162,13 +162,15 @@ short function_b8d30(long object_index, long marker_name, s_object_marker *marke
 
         if (model_index != NONE)
         {
-            long render_model_index = TAG_DATA(s_model_definition_view, model_index)->render_model_index;
+            s_model_definition_view const *model = TAG_DATA(s_model_definition_view, model_index);
             byte const *region_permutations = (byte *)object + object->region_permutations_offset;
             transform4x3f const *field_50 = (transform4x3f *)((byte *)object + object->node_matrices_offset);
             bool mirrored = TEST_FIELD_BIT(object->mirrored);
             volatile long node_count = object->node_matrices_size / sizeof(transform4x3f);
 
-            result = function_1d8f50(function_1d8f00(render_model_index, marker_name), render_model_index,
+            long marker_group_index = function_1d8f00(model->render_model_index, marker_name);
+
+            result = function_1d8f50(marker_group_index, model->render_model_index,
                 region_permutations, NULL, field_50, mirrored, markers, count);
 
         }

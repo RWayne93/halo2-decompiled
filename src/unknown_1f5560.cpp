@@ -727,10 +727,10 @@ bool function_1f8160(long actor_index, signed char const *types, point3f const *
         s_movement_speed_definition *definition = (s_movement_speed_definition *)function_1e4a50(actor->unknown054);
         if (definition)
         {
-            short maximum = (definition->type < 6 ? definition->type : 6) - 1;
+            short selected_type = (definition->type < 6 ? definition->type : 6) - 1;
             if (force)
             {
-                if ((short)(((1 << (maximum + 1)) - 1) | *types))
+                if ((short)(((1 << (selected_type + 1)) - 1) | *types))
                 {
                     first_type = (*types & 1) != 0;
                     valid = true;
@@ -742,11 +742,13 @@ bool function_1f8160(long actor_index, signed char const *types, point3f const *
                 {
                     if (*types & (1 << i))
                     {
-                        short type = i <= maximum ? i : maximum;
-                        speed = 0.0f;
+                        if (i <= selected_type)
+                            selected_type = i;
+                        real selected_speed = 0.0f;
                         byte *globals = (byte *)g_4e034c;
-                        if (type >= 0 && type < 6 && globals && *(long *)(globals + 0xc8) > 0)
-                            speed = *(real *)(*(byte **)(globals + 0xcc) + 0x80 + type * 4);
+                        if (selected_type >= 0 && selected_type < 6 && globals && *(long *)(globals + 0xc8) > 0)
+                            selected_speed = *(real *)(*(byte **)(globals + 0xcc) + 0x80 + selected_type * 4);
+                        speed = selected_speed;
                         first_type = i == 0;
                         valid = true;
                         break;

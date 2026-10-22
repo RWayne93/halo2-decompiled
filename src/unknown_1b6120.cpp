@@ -92,14 +92,15 @@ long __stdcall function_1b6120(long actor_index, s_slot *slot)
 			iterator.reference.unknown0 = NONE;
 			for (entry = function_26f0c0(&iterator); entry; entry = function_26f0c0(&iterator))
 			{
+				long current_reference = iterator.reference.unknown0;
 				if (joint_index == NONE && element_502424_get(entry->unknown4)->target.unknown4 == node->object_index &&
-					function_26ecc0(actor_index, iterator.reference.unknown0, (s_joint_behavior_state *)slot))
+					function_26ecc0(actor_index, current_reference, (s_joint_behavior_state *)slot))
 				{
 					joint_index = entry->unknown4;
 				}
 				else
 				{
-					joint_decline(actor_index, iterator.reference.unknown0);
+					joint_decline(actor_index, current_reference);
 				}
 			}
 
@@ -186,18 +187,12 @@ short __stdcall function_1b6450(long actor_index, s_slot *slot, bool active)
 	s_slot_25 *state = (s_slot_25 *)slot;
 	s_502424_element_25 *joint = (s_502424_element_25 *)element_502424_get(state->element_index);
 
-	if (joint->object_index != NONE)
-	{
-		if (joint->unknown80)
-		{
-			if (--state->unknown1c > 0)
-				goto leave;
-		}
-		else
-		{
-			goto evaluate;
-		}
-	}
+	if (joint->object_index == NONE)
+		goto done;
+	if (!joint->unknown80)
+		goto evaluate;
+	if (--state->unknown1c > 0)
+		goto leave;
 
 done:
 	result = g_46fbe4;

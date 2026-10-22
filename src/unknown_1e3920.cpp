@@ -8,6 +8,7 @@
 #include "globals.h"
 #include "slot_handler.h"
 #include "unknown_1e3920.h"
+#include "vector_products.h"
 #include <math.h>
 #include <string.h>
 #include "unknown_1e46c0.h"
@@ -198,7 +199,8 @@ s_actor_moving *function_1e47d0(s_actor_point_request *request)
 		{
 			actor = actor_moving_get(next_actor_index);
 			request->actor_index = next_actor_index;
-			request->next_actor_index = *(long *)((byte *)actor + 0x80);
+			if (actor)
+				request->next_actor_index = *(long *)((byte *)actor + 0x80);
 		}
 		if (actor)
 		{
@@ -690,14 +692,7 @@ void function_1e3b60(long actor_index)
 		vector3f *up = (vector3f *)(actor_bytes + 0x2a8);
 		*up = *(vector3f *)(object + 0x18c);
 		vector3f *left = (vector3f *)(actor_bytes + 0x2b4);
-		{
-			real i = up->k * g_4687b0->j - g_4687b0->k * up->j;
-			real j = g_4687b0->k * up->i - g_4687b0->i * up->k;
-			real k = g_4687b0->i * up->j - up->i * g_4687b0->j;
-			left->i = i;
-			left->j = j;
-			left->k = k;
-		}
+		cross3f(g_4687b0, up, left);
 		function_30bf0(left);
 		vector3f *forward = (vector3f *)(actor_bytes + 0x2c0);
 		{

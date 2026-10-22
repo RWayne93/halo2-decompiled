@@ -20,7 +20,7 @@ void function_1fe620(long arg_0, byte const *arg_1, byte const *arg_2)
         local_1[0x70e] = false;
     local_1[0x70d] = local_1[0x70e];
     local_1[0x70e] = false;
-    real timer_value = slot_random_range(*(real const *)(arg_1 + 0x20), *(real const *)(arg_1 + 0x24)) *
+    real timer_value = function_259d0(&g_4e7408->unknown0, __FILE__, __LINE__, *(real const *)(arg_1 + 0x20), *(real const *)(arg_1 + 0x24)) *
         (real)g_510c54->field_2_3;
     long timer_result;
     timer_result = real_to_long(timer_value);
@@ -79,7 +79,7 @@ void function_1fe620(long arg_0, byte const *arg_1, byte const *arg_2)
     real second_limit = *(real const *)(arg_1 + 0x1c);
     real first_lower = 0.0f - first_limit;
     real second_lower = 0.0f - second_limit;
-    real local_13 = slot_random_range(first_lower, first_limit);
+    real local_13 = function_259d0(&g_4e7408->unknown0, __FILE__, __LINE__, first_lower, first_limit);
     real local_14 = slot_random_range(second_lower, second_limit) + local_13;
     real local_15 = slot_random_range(*(real const *)(arg_1 + 0x14),
         *(real const *)(arg_1 + 0x18));

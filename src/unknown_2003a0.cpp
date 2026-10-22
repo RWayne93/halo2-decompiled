@@ -281,7 +281,7 @@ PRIVATE __forceinline s_squad_group_datum *next_group_record_202370(s_group_reco
 // @retail 0x202370
 void function_202370(void)
 {
-	s_group_record_iterator iterator;
+	s_group_record_iterator iterator = {0};
 	if (g_4f55d0->active)
 	{
 		iterator.records.data = g_51e9dc;
@@ -1087,7 +1087,7 @@ void function_2009d0(void)
 		s_squad_group_datum *group = &((s_squad_group_datum *)groups->data)[(word)i];
 		if (group->parent_index != NONE)
 		{
-			s_squad_group_datum *parent = &((s_squad_group_datum *)groups->data)[group->parent_index & 0xffff];
+			s_squad_group_datum *parent = squad_group_get(group->parent_index);
 			long child = parent->first_child_index;
 			if (child == NONE)
 				parent->first_child_index = i;

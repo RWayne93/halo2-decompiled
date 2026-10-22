@@ -65,13 +65,13 @@ Analysis, documentation and review do not need it.
 
 ## Status
 
-Decompilation is under way, and 9383 retail functions now match byte for
+Decompilation is under way, and 9407 retail functions now match byte for
 byte. The checker reports:
 
 ```
-matched 9383 of 11321 game functions (1431971 of 2784283 bytes, 51.43%)
-matched 871 of 1041 Havok functions (99167 of 234536 bytes, 42.28%)
-matched 10288 of 17654 functions in scope (1533753 of 3904218 bytes, 39.28%)
+matched 9407 of 11321 game functions (1443490 of 2784283 bytes, 51.84%)
+matched 883 of 1041 Havok functions (105544 of 234536 bytes, 45.00%)
+matched 10324 of 17654 functions in scope (1551649 of 3904218 bytes, 39.74%)
 ```
 
 Matched code so far includes:
@@ -246,6 +246,8 @@ Thank you to everyone who has contributed to this project so far:
   child-agent code.
 - [@ccgman123](https://github.com/ccgman123): a careful diagnosis of seven
   near misses, and the cleanup that removed an in-body pragma from 0x9d1c0.
+- [@marioag0412](https://github.com/marioag0412): the match of 0x1e3480,
+  an object's actor index.
 
 [@kirklandsig](https://github.com/kirklandsig) maintains the project: runs the
 build, reviews and merges every pull request, and keeps the

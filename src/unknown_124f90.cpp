@@ -1901,6 +1901,7 @@ short sound_voice_acquire(long sound_index, long *reason)
 }
 
 bool function_12be90(void);
+static inline void approach_126660(real *value, real delta, real lower, real upper);
 
 /* advances the sound system's clock and the ambience fades, and fades the
    master gain out while the game asks for it (after its delay) and back in
@@ -1939,7 +1940,7 @@ void sound_system_update_time(void)
 		{
 			real step = sound_system->elapsed_time / (0.001f > sound_system->master_fade_times.k ? 0.001f : sound_system->master_fade_times.k);
 
-			sound_system->master_fade += PIN(1.0f - sound_system->master_fade, 0.0f - step, step);
+			approach_126660(&sound_system->master_fade, 1.0f - sound_system->master_fade, 0.0f - step, step);
 			sound_system->master_fade_delay = NONE;
 		}
 	}
@@ -3574,7 +3575,7 @@ void function_125b40(void)
 			{
 				local_0->changing_pause = true;
 				local_0->unknown7b = false;
-				for (long local_1 = 0; local_1 < SOUND_SYSTEM->voice_count; local_1++)
+				for (short local_1 = 0; local_1 < SOUND_SYSTEM->voice_count; local_1++)
 					sound_voice_restart_stream((short)local_1);
 				looping_sound_controllers_synchronize(true);
 				function_21f5a0();

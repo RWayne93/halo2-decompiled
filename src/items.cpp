@@ -843,7 +843,9 @@ void function_10d710(vector3f const *facing, long object_index, point3f const *o
                 item_vector_scale(&axis, 1.0f / root);
                 real scalar = root * 0.5f;
                 real scale = scalar * scalar * 2.0f - 1.0f;
-                real dot = (forward->k * axis.k + forward->j * axis.j + forward->i * axis.i) * 2.0f;
+                real projection = forward->k * axis.k + forward->j * axis.j;
+                projection += forward->i * axis.i;
+                real dot = projection * 2.0f;
                 up.i = (forward->k * axis.j - forward->j * axis.k) * (scalar * 2.0f) + forward->i * scale + dot * axis.i;
                 up.j = (axis.k * forward->i - forward->k * axis.i) * (scalar * 2.0f) + axis.j * dot + forward->j * scale;
                 up.k = (forward->j * axis.i - axis.j * forward->i) * (scalar * 2.0f) + axis.k * dot + forward->k * scale;

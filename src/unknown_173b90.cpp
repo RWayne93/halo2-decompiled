@@ -731,6 +731,7 @@ void function_175270(s_particle_system_datum *particle_system, s_particle_system
 // @retail 0x175a80
 void function_175a80(bool tinted, dword color_a, dword color_b, s_particle_system_datum *particle_system, bool multiplied)
 {
+	dword packed = color_a;
 	if (!multiplied)
 	{
 		if (tinted)
@@ -741,8 +742,9 @@ void function_175a80(bool tinted, dword color_a, dword color_b, s_particle_syste
 			color.red *= 0.5f;
 			color.green *= 0.5f;
 			color.blue *= 0.5f;
-			particle_system->color = pack_color3f(&color);
+			packed = pack_color3f(&color);
 		}
+		else return;
 	}
 	else if (tinted)
 	{
@@ -754,12 +756,9 @@ void function_175a80(bool tinted, dword color_a, dword color_b, s_particle_syste
 		color.red *= other.red;
 		color.green *= other.green;
 		color.blue *= other.blue;
-		particle_system->color = pack_color3f(&color);
+		packed = pack_color3f(&color);
 	}
-	else
-	{
-		particle_system->color = color_a;
-	}
+	particle_system->color = packed;
 }
 
 extern vector3f *g_4687bc;
@@ -1053,7 +1052,7 @@ void __stdcall function_174420(long system_index, bool view_pass, bool camera_re
                                 if (!visible)
                                 {
                                     real distance = (real)(sqrt(delta.k * delta.k + delta.j * delta.j + delta.i * delta.i) * g_4b9dcc);
-                                    draw = function_249bb0((s_distance_fade const *)definition, distance) > 0.0f;
+                                    if (!(function_249bb0((s_distance_fade const *)definition, distance) > 0.0f)) draw = false;
                                 }
                                 *(dword *)((byte *)location + 0x30) = g_4ba034;
                             }

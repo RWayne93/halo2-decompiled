@@ -97,7 +97,7 @@ void function_13992a(byte *arg_1, long arg_2)
         {
             byte const *local_3 = function_13992b(*(long *)(local_2 + 0x2c));
             s_unit_weapon_hands local_4;
-            bool local_5 = false;
+            long local_5 = false;
             function_cb430(*(long *)(local_2 + 0x2c), &local_4);
             arg_1[0x1c] = true;
             *(long *)(arg_1 + 0x20) = *(long *)(local_3 + 0x1e4);
